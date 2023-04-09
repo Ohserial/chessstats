@@ -21,9 +21,9 @@ black_expr='\.?\s*(((?P<B_castle>O-O(:?-O)?)|(?P<B_Piece>[KQNBR](?P<B_Origin_R_F
 
 def parsemoves(pgndata):
     mover=re.compile(move_expr + white_expr + black_expr)
-    for i, move in enumerate( mover.findall( pgndata )):
-        if i+1 != int(move[0]):
-            raise Exception( f"Move({i}) not equal to {move[0]} - Out of order!!!" )
+    for i, move in enumerate( mover.finditer( pgndata )):
+        #if i+1 != int(move[0]):
+            #raise Exception( f"Move({i}) not equal to {move[0]} - Out of order!!!" )
         yield move
         
 movedata="""
@@ -36,4 +36,4 @@ Nxa5 34. h6 g6 35. Kh2 c5 36. Kh3 c4 37. Kh2 c3 38. Kh3 c2 39. Kh2 c1=Q 40. Kh3
 Qh1# 0-1
 """
 for m in parsemoves(movedata):
-    print(m)
+    print(m.groupdict())
