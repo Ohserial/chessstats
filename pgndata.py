@@ -15,7 +15,7 @@ def parse_moves( pgnblock="" ):
 delim=re.compile(' \d\.')
 move_expr='\s*(\d{1,3})\.?\s*((?:(?:O-O(?:-O)?)|(?:[KQNBR][1-8a-h]?x?[a-h]x?[1-8])|(?:[a-h]x?[a-h]?[1-8]\=?[QRNB]?))\+?)(?:\s*\d+\.?\d+?m?s)?\.?\s*((?:(?:O-O(?:-O)?)|(?:[KQNBR][1-8a-h]?x?[a-h]x?[1-8])|(?:[a-h]x?[a-h]?[1-8]\=?[QRNB]?))\+?)?(?:\s*\d+\.?\d+?m?s)?'
 move_expr='\s*(\d{1,3})'
-white_expr='\.?\s*((?:(?:O-O(?:-O)?)|(?:[KQNBR][1-8a-h]?x?[a-h]x?[1-8])|(?:[a-h]x?[a-h]?[1-8]\=?[QRNB]?))\+?)'
+white_expr='\.?\s*(((?P<castle>O-O(:?-O)?)|(?P<Piece>[KQNBR](?P<Origin_R_F>[1-8a-h]?)(?P<Takes>x?)(?P<File>[a-h])(?P<Takes1>x?)(?P<Rank>[1-8]))|((?P<PTake>[a-h]x?)(?P<PDestination>[a-h]?[1-8]\=?)(?P<PPiece>[QRNB]?)))\+?)'
 black_expr='(?:\s*\d+\.?\d+?m?s)?\.?\s*((?:(?:O-O(?:-O)?)|(?:[KQNBR][1-8a-h]?x?[a-h]x?[1-8])|(?:[a-h]x?[a-h]?[1-8]\=?[QRNB]?))\+?)?(?:\s*\d+\.?\d+?m?s)?'
 
 def parsemoves(pgndata):
@@ -34,4 +34,5 @@ Rb2 21. Rf4 Rb1 22. Rd4 Re8 23. Kf1 Re4 24. Rxe4 Nxe4 25. a5 Rxd1+ 26. Ke2 Rb1
 Nxa5 34. h6 g6 35. Kh2 c5 36. Kh3 c4 37. Kh2 c3 38. Kh3 c2 39. Kh2 c1=Q 40. Kh3
 Qh1# 0-1
 """
-print(list(parsemoves(movedata)))
+for m in parsemoves(movedata):
+    print(m)
