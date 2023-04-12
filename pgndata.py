@@ -1,6 +1,28 @@
 import pandas as pd
 import sys
+import numpy as np
 
+move_dtypes={'Move':int,
+             'W_castle':int,
+             'W_Piece':char,
+             'W_Origin_R_F':char,
+             'W_Takes':bool,
+             'W_File':char,
+             'W_Takes1':bool,
+             'W_Rank':char{1-8},
+             'W_PTake':bool,
+             'W_PDestination':char,
+             'W_PPiece':char,
+             'B_castle':int,
+             'B_Piece':char,
+             'B_Origin_R_F':char,
+             'B_Takes':bool,
+             'B_File':char{a-h},
+             'B_Takes1':bool,
+             'B_Rank':char,
+             'B_PTake':bool,
+             'B_PDestination':char,
+             'B_PPiece':char}
 
 """
 Notation:
@@ -20,8 +42,10 @@ black_expr='\.?\s*(((?P<B_castle>O-O(:?-O)?)|(?P<B_Piece>[KQNBR](?P<B_Origin_R_F
 def parsemoves(pgndata):
     mover=re.compile(move_expr + white_expr + black_expr)
     data = mover.finditer(pgndata)
-    return pd.DataFrame.from_records(columns=('Move','W_castle','W_Piece','W_Origin_R_F','W_Takes','W_File','W_Takes1','W_Rank','W_PTake','W_PDestination','W_PPiece','B_castle','B_Piece','B_Origin_R_F','B_Takes','B_File','B_Takes1','B_Rank','B_PTake','B_PDestination','B_PPiece'), data=[m.groupdict() for m in mover.finditer(pgndata)], index="Move")
-        
+    tf=pd.DataFrame.from_records(columns=('Move','W_castle','W_Piece','W_Origin_R_F','W_Takes','W_File','W_Takes1','W_Rank','W_PTake','W_PDestination','W_PPiece','B_castle','B_Piece','B_Origin_R_F','B_Takes','B_File','B_Takes1','B_Rank','B_PTake','B_PDestination','B_PPiece'), data=[m.groupdict() for m in mover.finditer(pgndata)], index="Move")
+    print(tf)
+    return(tf)
+
 def parsepgn(gamedata):
     tag_expr='\[(?P<name>[^\s]+)\s+(?P<value>[^\]]+)\]'
     tagger=re.compile(tag_expr)
@@ -36,8 +60,6 @@ def parsepgn(gamedata):
     retval['moves']=parsemoves(gamedata.read())
     return retval
 
-
-
-for fname in sys.argv[1:]:
-    with open(fname) as pgn:
-        print(parsepgn(pgn))
+df=pd.DataFrame.from_records(index=sys.argv[1:],
+                             data=[parsepgn(open(fname)) for fname in sys.argv[1:]])
+print(df.shape)
