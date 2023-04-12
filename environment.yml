@@ -1,0 +1,11 @@
+name: gchess
+channels:
+  - rapidsai
+  - conda-forge
+  - defaults
+dependencies:
+  - pandas
+  - pip:
+    - async-lichess-sdk
+    - berserk-downstream
+
